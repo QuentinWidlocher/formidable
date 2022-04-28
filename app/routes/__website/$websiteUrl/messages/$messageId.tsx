@@ -46,10 +46,10 @@ export default function NoteDetailsPage() {
   const data = useLoaderData() as LoaderData;
 
   return (
-    <div className="card w-96 mx-auto bg-base-200 shadow-xl">
+    <div className="card w-full md:w-1/2 mx-auto bg-base-200 shadow-xl">
     <div className="card-body">
       <h2 className="card-title">{data.message.object}</h2>
-      <h3 className="italic">From {data.message.from}</h3>
+      <h3 className="opacity-60 underline-offset-2 hover:underline">From <a href={`mailto:${data.message.from}`}>{data.message.from}</a></h3>
       <p className="my-5">{data.message.content}</p>
       <div className="card-actions justify-end">
         <form method="post">

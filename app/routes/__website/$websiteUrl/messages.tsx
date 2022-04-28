@@ -1,7 +1,8 @@
 import type { Message, Website } from "@prisma/client";
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { NavLink, Outlet, useCatch, useLoaderData, useOutletContext } from "@remix-run/react";
+import { Link, NavLink, Outlet, useCatch, useLoaderData, useOutletContext } from "@remix-run/react";
+import { Plus } from "iconoir-react";
 import invariant from "tiny-invariant";
 import { prisma } from "~/db.server";
 import { requireUserId } from "~/session.server";
@@ -54,21 +55,32 @@ export default function NoteDetailsPage() {
         <div className="w-80 bg-base-200 p-2 lg:w-96">
           <div>
             <div className="flex h-full flex-col">
+          <Link to="/websites" className="btn btn-ghost w-full gap-2">
+            Back to your websites
+          </Link>
 
+      <div className="divider"></div>
               {data.website.messages.length === 0 ? (
                 <p className="p-4">
                   No new messages
                 </p>
               ) : (
                 <ul className="base-100 menu rounded-box -m-2 space-y-2 p-2">
+                   <li className="menu-title">
+                      <span>Messages</span>
+                    </li>
                   {data.website.messages.map((message) => (
                     <li key={message.id}>
                       <NavLink
-                        className={({ isActive }) => `${isActive ? "bg-base-300" : ""}`}
+                        className={({ isActive }) => `${isActive ? "bg-base-300" : ""} flex flex-col items-start`}
                         to={message.id}
                         onClick={() => appDrawerToggleRef?.current?.click()}
                       >
-                        {message.object} {message.from ? `from ${message.from}` : ""}
+                        <span>{message.object}</span>
+                        {message.from 
+                          ? <span className="opacity-60 -mt-4">from {message.from}</span>
+                          : null
+                        }
                       </NavLink>
                     </li>
                   ))}
