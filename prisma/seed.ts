@@ -24,10 +24,11 @@ async function seed() {
     },
   });
 
-  const website = await prisma.website.create({
+  const form = await prisma.form.create({
     data: {
       name: "Formidable",
-      url: "formidable.site",
+      slug: "formidable",
+      domain: "formidable.site",
       userId: user.id,
     },
   });
@@ -37,12 +38,9 @@ async function seed() {
       from: "test@example.com",
       object: "Sample mail",
       content: "lorem ipsum dolor sit amet ...",
-      website: {
+      form: {
         connect: {
-          id: {
-            url: website.url,
-            userId: website.userId,
-          },
+          slug: form.slug,
         }
       }
     }

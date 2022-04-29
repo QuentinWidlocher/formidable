@@ -15,7 +15,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   password Password?
-  websites Website[]
+  forms    Form[]
 }
 
 model Password {
@@ -25,9 +25,10 @@ model Password {
   userId String @unique
 }
 
-model Website {
-  name String
-  url  String
+model Form {
+  name   String
+  slug   String @id
+  domain String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -36,8 +37,6 @@ model Website {
   userId String
 
   messages Message[]
-
-  @@id([url, userId], name: "id")
 }
 
 model Message {
@@ -49,7 +48,6 @@ model Message {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  website    Website @relation(fields: [websiteUrl, userId], references: [url, userId], onDelete: Cascade, onUpdate: Cascade)
-  websiteUrl String
-  userId     String
+  form     Form   @relation(fields: [formSlug], references: [slug], onDelete: Cascade, onUpdate: Cascade)
+  formSlug String
 }

@@ -2,7 +2,7 @@ import type { Message } from "@prisma/client";
 import type { ActionFunction, LoaderFunction} from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useCatch, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { prisma } from "~/db.server";
 import { requireUserId } from "~/session.server";
@@ -13,7 +13,7 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   requireUserId(request);
-  invariant(params.websiteUrl, "websiteUrl not found");
+  invariant(params.formSlug, "formSlug not found");
   invariant(params.messageId, "messageId not found");
 
   const message = await prisma.message.findUnique({
@@ -23,7 +23,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   })
 
   if (!message) {
-    return redirect(`/website/${params.websiteUrl}/messages`);
+    return redirect(`/${params.formSlug}/messages`);
   }
 
   return json<LoaderData>({ message });

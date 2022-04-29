@@ -13,11 +13,11 @@ export default function Index() {
             <p className="py-6">Just add one drop of <strong>Formidable</strong> to your website and get a contact form just like that !</p>
             {user ? (
                   <Link
-                    to="/websites"
+                    to="/forms"
                     prefetch="render"
                     className="btn btn-primary"
                   >
-                    See your websites
+                    See your forms
                   </Link>
                 ) : (
                   <div className="space-y-4 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5 sm:space-y-0">

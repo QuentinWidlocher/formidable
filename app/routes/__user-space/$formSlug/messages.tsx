@@ -1,36 +1,30 @@
-import type { Message, Website } from "@prisma/client";
+import type { Form, Message } from "@prisma/client";
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, NavLink, Outlet, useCatch, useLoaderData, useOutletContext } from "@remix-run/react";
-import { Plus } from "iconoir-react";
 import invariant from "tiny-invariant";
 import { prisma } from "~/db.server";
-import { requireUserId } from "~/session.server";
 
 type LoaderData = {
-  website: Website & { messages: Message[] };
+  form: Form & { messages: Message[] };
 };
 
-export const loader: LoaderFunction = async ({ request, params }) => {
-  const userId = await requireUserId(request);
-  invariant(params.websiteUrl, "websiteUrl not found");
+export const loader: LoaderFunction = async ({ params }) => {
+  invariant(params.formSlug, "formSlug not found");
 
-  const website = await prisma.website.findUnique({
+  const form = await prisma.form.findUnique({
     where: {
-      id: {
-        url: params.websiteUrl,
-        userId,
-      }
+      slug: params.formSlug,
     },
     include: {
       messages: true,
     }
   })
 
-  if (!website) {
+  if (!form) {
     throw new Response("Not Found", { status: 404 });
   }
-  return json<LoaderData>({ website });
+  return json<LoaderData>({ form });
 };
 
 export default function NoteDetailsPage() {
@@ -55,12 +49,12 @@ export default function NoteDetailsPage() {
         <div className="w-80 bg-base-200 p-2 lg:w-96">
           <div>
             <div className="flex h-full flex-col">
-          <Link to="/websites" className="btn btn-ghost w-full gap-2">
-            Back to your websites
+          <Link to="/forms" className="btn btn-ghost w-full gap-2">
+            Back to your forms
           </Link>
 
       <div className="divider"></div>
-              {data.website.messages.length === 0 ? (
+              {data.form.messages.length === 0 ? (
                 <p className="p-4">
                   No new messages
                 </p>
@@ -69,7 +63,7 @@ export default function NoteDetailsPage() {
                    <li className="menu-title">
                       <span>Messages</span>
                     </li>
-                  {data.website.messages.map((message) => (
+                  {data.form.messages.map((message) => (
                     <li key={message.id}>
                       <NavLink
                         className={({ isActive }) => `${isActive ? "bg-base-300" : ""} flex flex-col items-start`}

@@ -4,7 +4,7 @@ import { prisma } from "~/db.server";
 import { getUserByEmail } from "~/user.server";
 
 export const action: ActionFunction = async ({ request, params }) => {
-  invariant(params.websiteUrl, "websiteUrl not found");
+  invariant(params.formSlug, "formSlug not found");
 
   const rawFormData = await request.formData();
   const formData = Object.fromEntries(rawFormData.entries())
@@ -18,8 +18,7 @@ export const action: ActionFunction = async ({ request, params }) => {
       content: formData.content.toString(),
       object: formData.object.toString(),
       from: formData.from.toString(),
-      websiteUrl: params.websiteUrl,
-      userId: user.id,
+      formSlug: params.formSlug,
     }
   });
 }
