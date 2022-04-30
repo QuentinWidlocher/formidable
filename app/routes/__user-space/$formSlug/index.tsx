@@ -1,29 +1,29 @@
-import { ActionFunction } from "@remix-run/node";
-import invariant from "tiny-invariant";
+import type { ActionFunction, DataFunctionArgs, LoaderFunction } from "@remix-run/node";
 import { prisma } from "~/db.server";
 
-export const action: ActionFunction = async ({ request, params }) => {
-  invariant(params.formSlug, "formSlug not found");
-
-  console.debug('request.headers', request.headers)
-
-  let content: string | undefined;
-  let object: string | undefined;
-  let from: string | undefined;
-
-  if (request.method === "POST") {
-    const formData = await request.formData();
-    content = formData.get("content")?.toString();
-    object = formData.get("object")?.toString();
-    from = formData.get("from")?.toString();
-  } else if (request.method === "GET") {
-    const searchParams = new URL(request.url).searchParams;
-    content = searchParams.get("content")?.toString();
-    object = searchParams.get("object")?.toString();
-    from = searchParams.get("from")?.toString();
+async function createMessage(params: DataFunctionArgs['params'], request: Request, { content, object, from }: {
+  content?: string,
+  object?: string,
+  from?: string,
+}): Promise<Response> {
+  if (!params.formSlug) {
+    return new Response("Formidable : this form does not exists", { status: 400 });
   }
 
-  invariant(content, "content not found");
+  const returnUrl = request.headers.get("referer") ?? request.headers.get("origin");
+
+  if (!returnUrl) {
+    return new Response("Formidable : You cannot use this form if your browser block the 'referer' data. If you're in private browsing, try without.", { status: 400 });
+  }
+
+  if (!content) {
+    return new Response(null, {
+      status: 303,
+      headers: {
+        Location: returnUrl + '?formSent=false&error=content',
+      }
+    });
+  }
 
   await prisma.message.create({
     data: {
@@ -37,7 +37,25 @@ export const action: ActionFunction = async ({ request, params }) => {
   return new Response(null, {
     status: 303,
     headers: {
-      Location: request.headers.get("referer") ?? request.headers.get("origin") ?? "/",
+      Location: returnUrl + '?formSent=true',
     },
   });
+}
+
+export const action: ActionFunction = async ({ request, params }) => {
+  const formData = await request.formData();
+  const content = formData.get("content")?.toString();
+  const object = formData.get("object")?.toString();
+  const from = formData.get("from")?.toString();
+
+  return createMessage(params, request, { content, object, from });
+}
+
+export const loader: LoaderFunction = async ({ request, params }) => {
+  const searchParams = new URL(request.url).searchParams;
+  const content = searchParams.get("content")?.toString();
+  const object = searchParams.get("object")?.toString();
+  const from = searchParams.get("from")?.toString();
+
+  return createMessage(params, request, { content, object, from });
 }

@@ -57,8 +57,8 @@ export const action: ActionFunction = async ({ request }) => {
     }
   });
 
-  // TODO : redirect to form config
-  return redirect(`/${form.slug}/messages`);
+
+  return redirect(`/${form.slug}/details`);
 };
 
 export default function NewNotePage() {

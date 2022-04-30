@@ -2,6 +2,7 @@ import type { Form, Message } from "@prisma/client";
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, NavLink, Outlet, useCatch, useLoaderData } from "@remix-run/react";
+import { format, parseISO } from "date-fns";
 import { ArrowLeft, Menu, PageEdit } from "iconoir-react";
 import { useRef } from "react";
 import invariant from "tiny-invariant";
@@ -63,7 +64,7 @@ export default function NoteDetailsPage() {
                 <span>Back to your forms</span>
               </Link>
 
-              <Link to={`/${data.form.slug}/edition`} className="btn btn-ghost w-full gap-2">
+              <Link to={`/${data.form.slug}/details`} className="btn btn-ghost w-full gap-2">
                 <PageEdit />
                 <span>See form's details</span>
               </Link>
@@ -86,10 +87,16 @@ export default function NoteDetailsPage() {
                       to={message.id}
                       onClick={() => appDrawerToggleRef?.current?.click()}
                     >
-                      <span>{message.object}</span>
-                      {message.from
-                        ? <span className="opacity-60 -mt-4">from {message.from}</span>
-                        : null
+                      <span>
+                        {message.object ? (
+                          <>{message.object}, </>
+                        ) : null}
+                        {format(new Date(message.createdAt), "dd MMMM yyyy 'at' hh:mm")}
+                      </span>
+                      {
+                        message.from
+                          ? <span className="opacity-60 -mt-4">from {message.from}</span>
+                          : null
                       }
                     </NavLink>
                   </li>

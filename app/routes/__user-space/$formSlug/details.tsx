@@ -87,6 +87,12 @@ export default function FormEdition() {
             <pre data-prefix="16"><code>{'</'}<span className="text-red-400">form</span>{'>'}</code></pre>
           </div>
 
+          <p className="my-5">
+            <span>Only the content is required on Formidable, but you can add rules on your side of course.</span><br /><br />
+            <span>On a successful submit, the user will be redirected on the page they came from (by default, but you can provide a <code>redirect</code> input to redirect elsewhere) with <code>?formSent=true</code> in the query params.</span><br /><br />
+            <span>If the server encounters an error, you will be redirected with <code>?formSent=false&error=someField</code> where <code>someField</code> is the first field that's invalid.</span>
+          </p>
+
           <div className="divider"></div>
           <HtmlForm method="post">
             <button
