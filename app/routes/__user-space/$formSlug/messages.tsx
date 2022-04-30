@@ -2,7 +2,7 @@ import type { Form, Message } from "@prisma/client";
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, NavLink, Outlet, useCatch, useLoaderData } from "@remix-run/react";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 import { ArrowLeft, Menu, PageEdit } from "iconoir-react";
 import { useRef } from "react";
 import invariant from "tiny-invariant";
@@ -43,6 +43,10 @@ export default function NoteDetailsPage() {
       ></input>
       <div className="drawer-content">
         <main className="h-full p-5 lg:py-10">
+          <div className="mx-auto text-center mb-5">
+            <h2 className="text-xl mb-0">{data.form.name}</h2>
+            <h3 className="opacity-60">{data.form.domain}</h3>
+          </div>
           <label
             ref={appDrawerToggleRef}
             htmlFor="app-drawer"

@@ -1,9 +1,9 @@
 import type { Form } from "@prisma/client";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { useLoaderData, Form as HtmlForm, Link } from "@remix-run/react";
-import { ArrowLeft } from "iconoir-react";
+import { json, redirect } from "@remix-run/node";
+import { Form as HtmlForm, Link, useLoaderData } from "@remix-run/react";
+import { ArrowLeft, MessageText } from "iconoir-react";
+import type { FormEvent } from "react";
 import { useState } from "react";
 import invariant from "tiny-invariant";
 import { prisma } from "~/db.server";
@@ -47,9 +47,12 @@ export default function FormEdition() {
   const data = useLoaderData() as LoaderData;
   const [confirmDelete, setConfirmDelete] = useState(false);
 
-  function askForConfirmation() {
-    setConfirmDelete(true);
-    setTimeout(() => setConfirmDelete(false), 2500);
+  function askForConfirmation(event: FormEvent) {
+    if (!confirmDelete) {
+      event.preventDefault();
+      setConfirmDelete(true);
+      setTimeout(() => setConfirmDelete(false), 2500);
+    }
   }
 
   return (
@@ -59,6 +62,10 @@ export default function FormEdition() {
           <Link to="/forms" className="btn btn-ghost w-full gap-2">
             <ArrowLeft />
             <span>Back to your forms</span>
+          </Link>
+          <Link to={`/${data.form.slug}/messages`} className="btn btn-ghost w-full gap-2">
+            <MessageText />
+            <span>See the messages</span>
           </Link>
           <h2 className="card-title mt-5">{data.form.name}</h2>
           <h3 className="opacity-60">{data.form.domain}</h3>
@@ -94,11 +101,9 @@ export default function FormEdition() {
           </p>
 
           <div className="divider"></div>
-          <HtmlForm method="post">
+          <HtmlForm method="post" onSubmit={askForConfirmation}>
             <button
-              className={`btn btn-block ${confirmDelete ? 'btn-error' : 'btn-ghost'}`}
-              onClick={() => askForConfirmation()}
-              type={confirmDelete ? 'submit' : 'button'}>
+              className={`btn btn-block ${confirmDelete ? 'btn-error' : 'btn-ghost'}`}>
               {confirmDelete ? 'Click again to confirm' : 'Delete this form'}
             </button>
           </HtmlForm>
