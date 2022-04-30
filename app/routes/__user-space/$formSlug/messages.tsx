@@ -1,7 +1,9 @@
 import type { Form, Message } from "@prisma/client";
-import type { LoaderFunction } from "@remix-run/node";
+import type { ActionFunction, LoaderFunction} from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link, NavLink, Outlet, useCatch, useLoaderData, useOutletContext } from "@remix-run/react";
+import { Form as HtmlForm, Link, NavLink, Outlet, useCatch, useLoaderData, useOutletContext } from "@remix-run/react";
+import { useState } from "react";
 import invariant from "tiny-invariant";
 import { prisma } from "~/db.server";
 
@@ -27,9 +29,28 @@ export const loader: LoaderFunction = async ({ params }) => {
   return json<LoaderData>({ form });
 };
 
+export const action: ActionFunction = async ({ params }) => {
+  invariant(params.formSlug, "formSlug not found");
+
+  await prisma.form.delete({
+    where: {
+      slug: params.formSlug,
+    }
+  });
+
+  return redirect('/forms');
+}
+
 export default function NoteDetailsPage() {
   const data = useLoaderData() as LoaderData;
   const { appDrawerToggleRef } = useOutletContext<{ appDrawerToggleRef: React.MutableRefObject<HTMLLabelElement | null> }>();
+
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
+  function askForConfirmation() {
+    setConfirmDelete(true);
+    setTimeout(() => setConfirmDelete(false), 2500);
+  }
 
   return (
     <div className="drawer-mobile drawer w-full flex-1">
@@ -47,8 +68,7 @@ export default function NoteDetailsPage() {
       <div className="drawer-side">
         <label htmlFor="app-drawer" className="drawer-overlay"></label>
         <div className="w-80 bg-base-200 p-2 lg:w-96">
-          <div>
-            <div className="flex h-full flex-col">
+          <div className="flex h-full flex-col">
           <Link to="/forms" className="btn btn-ghost w-full gap-2">
             Back to your forms
           </Link>
@@ -80,9 +100,17 @@ export default function NoteDetailsPage() {
                   ))}
                 </ul>
               )}
-            </div>
 
-          </div>
+              <div className="divider mt-auto"></div>
+              <HtmlForm method="post">
+                <button 
+                className={`btn btn-block ${confirmDelete ? 'btn-error' : 'btn-ghost'}`} 
+                onClick={() => askForConfirmation()} 
+                type={confirmDelete ? 'submit' : 'button'}>
+                  {confirmDelete ? 'Click again to confirm' : 'Delete this form'}
+                </button>
+              </HtmlForm>
+            </div>
         </div>
       </div>
     </div>

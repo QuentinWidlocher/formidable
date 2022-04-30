@@ -19,7 +19,7 @@ export default function Navbar({ user, appDrawerToggleRef }: NavbarProps) {
           <Menu />
         </label>
         <h1 className="ml-3 text-xl font-bold">
-          <Link to=".">
+          <Link to="forms">
             Formidable
           </Link>
         </h1>

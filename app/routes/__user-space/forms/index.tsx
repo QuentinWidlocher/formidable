@@ -6,7 +6,7 @@ import { prisma } from "~/db.server";
 import { requireUserId } from "~/session.server";
 
 type LoaderData = {
-  forms: Form[];
+  formsByDomain: Record<string, Form[]>;
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -18,7 +18,12 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
   });
 
-  return json<LoaderData>({forms});
+  let formsByDomain = forms.reduce((acc, form) => {
+    acc[form.domain] = [...(acc[form.domain] ?? []), form];
+    return acc;
+  }, {} as Record<string, Form[]>);
+
+  return json<LoaderData>({formsByDomain});
 }
 
 export default function WebsiteList() {
@@ -27,17 +32,24 @@ export default function WebsiteList() {
   return (
     <section className="card w-96 bg-base-200 my-5 shadow-xl mx-auto">
   <div className="card-body">
-    <h2 className="card-title mb-5">Your forms</h2>
-    <ul className="menu bg-base-100 rounded-box p-2">
-      {data.forms.map(form => (
-        <li key={form.slug}>
-          <Link to={`/${form.slug}/messages`} className="flex flex-col items-start">
-            <span>{form.name}</span>
-            <span className="opacity-60 -mt-4">https://{form.domain}/</span>
-          </Link>
+    <h2 className="card-title">Your forms</h2>
+    <ul className="menu bg-base-100 rounded-box p-2 my-5">
+      {Object.keys(data.formsByDomain).map(formDomain => (
+        <>
+        <li className="menu-title mt-2">
+          <span>{formDomain}</span>
         </li>
+        {data.formsByDomain[formDomain].map(form => (
+          <li key={form.slug}>
+            <Link to={`/${form.slug}/messages`}>
+              {form.name}
+            </Link>
+          </li>
+        ))}
+        </>
       ))}
     </ul>
+    <Link to="new" className="btn btn-outline">Add another one</Link>
   </div>
   </section>
   )
