@@ -76,7 +76,8 @@ export default function NewNotePage() {
   }, [actionData]);
 
   return (
-    <section className="card w-96 bg-base-200 my-5 shadow-xl mx-auto">
+    <div className="py-5 lg:py-10">
+      <section className="card w-full sm:w-96 bg-base-200 shadow-xl mx-auto">
 <div className="card-body">
   <h2 className="card-title">Create a form</h2>
   <Form className="flex h-full flex-col" method="post">
@@ -142,5 +143,6 @@ export default function NewNotePage() {
       </Form>
 </div>
     </section>
+    </div>
   );
 }

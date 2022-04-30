@@ -19,11 +19,8 @@ export let loader: LoaderFunction = async ({ request }) => {
 
 export default function WebsiteLayout() {
   let data = useLoaderData() as LoaderData;
-  const appDrawerToggleRef = useRef<HTMLLabelElement | null>(null);
-  
   return <>
-    <Navbar user={data.user} appDrawerToggleRef={appDrawerToggleRef}/>
-
-    <Outlet context={{appDrawerToggleRef}}/>
+    <Navbar user={data.user}/>
+    <Outlet/>
   </>
 }

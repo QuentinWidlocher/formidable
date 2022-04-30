@@ -1,9 +1,10 @@
 import type { Form, Message } from "@prisma/client";
-import type { ActionFunction, LoaderFunction} from "@remix-run/node";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form as HtmlForm, Link, NavLink, Outlet, useCatch, useLoaderData, useOutletContext } from "@remix-run/react";
-import { useState } from "react";
+import { ArrowLeft, Menu, PageEdit } from "iconoir-react";
+import { useRef, useState } from "react";
 import invariant from "tiny-invariant";
 import { prisma } from "~/db.server";
 
@@ -29,28 +30,9 @@ export const loader: LoaderFunction = async ({ params }) => {
   return json<LoaderData>({ form });
 };
 
-export const action: ActionFunction = async ({ params }) => {
-  invariant(params.formSlug, "formSlug not found");
-
-  await prisma.form.delete({
-    where: {
-      slug: params.formSlug,
-    }
-  });
-
-  return redirect('/forms');
-}
-
 export default function NoteDetailsPage() {
   const data = useLoaderData() as LoaderData;
-  const { appDrawerToggleRef } = useOutletContext<{ appDrawerToggleRef: React.MutableRefObject<HTMLLabelElement | null> }>();
-
-  const [confirmDelete, setConfirmDelete] = useState(false);
-
-  function askForConfirmation() {
-    setConfirmDelete(true);
-    setTimeout(() => setConfirmDelete(false), 2500);
-  }
+  const appDrawerToggleRef = useRef<HTMLLabelElement | null>(null);
 
   return (
     <div className="drawer-mobile drawer w-full flex-1">
@@ -60,7 +42,14 @@ export default function NoteDetailsPage() {
         className="drawer-toggle"
       ></input>
       <div className="drawer-content">
-        <main className="h-full p-5">
+        <main className="h-full p-5 lg:py-10">
+          <label
+          ref={appDrawerToggleRef}
+          htmlFor="app-drawer"
+          className="btn btn-ghost btn-block gap-2 mb-5 lg:hidden"
+        >
+          <Menu /> <span>See the messages</span>
+        </label>
           <Outlet />
         </main>
       </div>
@@ -69,48 +58,46 @@ export default function NoteDetailsPage() {
         <label htmlFor="app-drawer" className="drawer-overlay"></label>
         <div className="w-80 bg-base-200 p-2 lg:w-96">
           <div className="flex h-full flex-col">
-          <Link to="/forms" className="btn btn-ghost w-full gap-2">
-            Back to your forms
-          </Link>
+            <div className="flex flex-col space-y-3">
+              <Link to="/forms" className="btn btn-ghost w-full gap-2">
+              <ArrowLeft/>
+              <span>Back to your forms</span>
+            </Link>
 
-      <div className="divider"></div>
-              {data.form.messages.length === 0 ? (
-                <p className="p-4">
-                  No new messages
-                </p>
-              ) : (
-                <ul className="base-100 menu rounded-box -m-2 space-y-2 p-2">
-                   <li className="menu-title">
-                      <span>Messages</span>
-                    </li>
-                  {data.form.messages.map((message) => (
-                    <li key={message.id}>
-                      <NavLink
-                        className={({ isActive }) => `${isActive ? "bg-base-300" : ""} flex flex-col items-start`}
-                        to={message.id}
-                        onClick={() => appDrawerToggleRef?.current?.click()}
-                      >
-                        <span>{message.object}</span>
-                        {message.from 
-                          ? <span className="opacity-60 -mt-4">from {message.from}</span>
-                          : null
-                        }
-                      </NavLink>
-                    </li>
-                  ))}
-                </ul>
-              )}
-
-              <div className="divider mt-auto"></div>
-              <HtmlForm method="post">
-                <button 
-                className={`btn btn-block ${confirmDelete ? 'btn-error' : 'btn-ghost'}`} 
-                onClick={() => askForConfirmation()} 
-                type={confirmDelete ? 'submit' : 'button'}>
-                  {confirmDelete ? 'Click again to confirm' : 'Delete this form'}
-                </button>
-              </HtmlForm>
+            <Link to={`/${data.form.slug}/edition`} className="btn btn-ghost w-full gap-2">
+              <PageEdit/>
+              <span>See form's details</span>
+            </Link>
             </div>
+
+            <div className="divider"></div>
+            {data.form.messages.length === 0 ? (
+              <p className="p-4">
+                No new messages
+              </p>
+            ) : (
+              <ul className="base-100 menu rounded-box -m-2 space-y-2 p-2">
+                <li className="menu-title">
+                  <span>Messages</span>
+                </li>
+                {data.form.messages.map((message) => (
+                  <li key={message.id}>
+                    <NavLink
+                      className={({ isActive }) => `${isActive ? "bg-base-300" : ""} flex flex-col items-start`}
+                      to={message.id}
+                      onClick={() => appDrawerToggleRef?.current?.click()}
+                    >
+                      <span>{message.object}</span>
+                      {message.from
+                        ? <span className="opacity-60 -mt-4">from {message.from}</span>
+                        : null
+                      }
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
       </div>
     </div>
