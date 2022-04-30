@@ -4,7 +4,6 @@ import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { requireUser } from "~/session.server";
 import { Outlet, useLoaderData } from "@remix-run/react";
-import { useRef } from "react";
 
 type LoaderData = {
   user: User
@@ -20,7 +19,7 @@ export let loader: LoaderFunction = async ({ request }) => {
 export default function WebsiteLayout() {
   let data = useLoaderData() as LoaderData;
   return <>
-    <Navbar user={data.user}/>
-    <Outlet/>
+    <Navbar user={data.user} />
+    <Outlet />
   </>
 }

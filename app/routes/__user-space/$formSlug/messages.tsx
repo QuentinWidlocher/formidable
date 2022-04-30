@@ -44,12 +44,12 @@ export default function NoteDetailsPage() {
       <div className="drawer-content">
         <main className="h-full p-5 lg:py-10">
           <label
-          ref={appDrawerToggleRef}
-          htmlFor="app-drawer"
-          className="btn btn-ghost btn-block gap-2 mb-5 lg:hidden"
-        >
-          <Menu /> <span>See the messages</span>
-        </label>
+            ref={appDrawerToggleRef}
+            htmlFor="app-drawer"
+            className="btn btn-ghost btn-block gap-2 mb-5 lg:hidden"
+          >
+            <Menu /> <span>See the messages</span>
+          </label>
           <Outlet />
         </main>
       </div>
@@ -60,14 +60,14 @@ export default function NoteDetailsPage() {
           <div className="flex h-full flex-col">
             <div className="flex flex-col space-y-3">
               <Link to="/forms" className="btn btn-ghost w-full gap-2">
-              <ArrowLeft/>
-              <span>Back to your forms</span>
-            </Link>
+                <ArrowLeft />
+                <span>Back to your forms</span>
+              </Link>
 
-            <Link to={`/${data.form.slug}/edition`} className="btn btn-ghost w-full gap-2">
-              <PageEdit/>
-              <span>See form's details</span>
-            </Link>
+              <Link to={`/${data.form.slug}/edition`} className="btn btn-ghost w-full gap-2">
+                <PageEdit />
+                <span>See form's details</span>
+              </Link>
             </div>
 
             <div className="divider"></div>

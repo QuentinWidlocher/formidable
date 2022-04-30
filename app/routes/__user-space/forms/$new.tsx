@@ -1,5 +1,5 @@
-import type { ActionFunction} from "@remix-run/node";
-import { redirect} from "@remix-run/node";
+import type { ActionFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import Alert from "@reach/alert";
 import { Form, Link, useActionData } from "@remix-run/react";
@@ -78,71 +78,71 @@ export default function NewNotePage() {
   return (
     <div className="py-5 lg:py-10">
       <section className="card w-full sm:w-96 bg-base-200 shadow-xl mx-auto">
-<div className="card-body">
-  <h2 className="card-title">Create a form</h2>
-  <Form className="flex h-full flex-col" method="post">
-        <input type="hidden" name="id" />
-        <div className="form-control">
-          <label htmlFor="name" className="label">
-            <span className="label-text">
-              Your form name
-            </span>
-          </label>
-          <input
-            ref={nameRef}
-            name="name"
-            placeholder="Contact, Newsletter, etc."
-            className="input input-bordered"
-            aria-invalid={actionData?.errors?.name ? true : undefined}
-            aria-errormessage={
-              actionData?.errors?.name ? "name-error" : undefined
-            }
-          />
-          <label htmlFor="name" className="label">
-            {actionData?.errors?.name && (
-              <Alert className="label-text-alt text-error" id="name=error">
-                {actionData.errors.name}
-              </Alert>
-            )}
-          </label>
-        </div>
+        <div className="card-body">
+          <h2 className="card-title">Create a form</h2>
+          <Form className="flex h-full flex-col" method="post">
+            <input type="hidden" name="id" />
+            <div className="form-control">
+              <label htmlFor="name" className="label">
+                <span className="label-text">
+                  Your form name
+                </span>
+              </label>
+              <input
+                ref={nameRef}
+                name="name"
+                placeholder="Contact, Newsletter, etc."
+                className="input input-bordered"
+                aria-invalid={actionData?.errors?.name ? true : undefined}
+                aria-errormessage={
+                  actionData?.errors?.name ? "name-error" : undefined
+                }
+              />
+              <label htmlFor="name" className="label">
+                {actionData?.errors?.name && (
+                  <Alert className="label-text-alt text-error" id="name=error">
+                    {actionData.errors.name}
+                  </Alert>
+                )}
+              </label>
+            </div>
 
-        <div className="form-control flex-1">
-          <label htmlFor="domain" className="label">
-            <span className="label-text">
-              You website's domain
-            </span>
-          </label>
-          <input
-            ref={domainRef}
-            name="domain"
-            placeholder="example.com"
-            className="input input-bordered"
-            aria-invalid={actionData?.errors?.domain ? true : undefined}
-            aria-errormessage={
-              actionData?.errors?.domain ? "domain-error" : undefined
-            }
-          />
-          <label htmlFor="body" className="label">
-            {actionData?.errors?.domain && (
-              <Alert className="label-text-alt text-error" id="domain=error">
-                {actionData.errors.domain}
-              </Alert>
-            )}
-          </label>
-        </div>
+            <div className="form-control flex-1">
+              <label htmlFor="domain" className="label">
+                <span className="label-text">
+                  You website's domain
+                </span>
+              </label>
+              <input
+                ref={domainRef}
+                name="domain"
+                placeholder="example.com"
+                className="input input-bordered"
+                aria-invalid={actionData?.errors?.domain ? true : undefined}
+                aria-errormessage={
+                  actionData?.errors?.domain ? "domain-error" : undefined
+                }
+              />
+              <label htmlFor="body" className="label">
+                {actionData?.errors?.domain && (
+                  <Alert className="label-text-alt text-error" id="domain=error">
+                    {actionData.errors.domain}
+                  </Alert>
+                )}
+              </label>
+            </div>
 
-        <div className="flex justify-end space-x-3">
-          <Link to="/forms" className="btn btn-ghost">
-            Cancel
-          </Link>
-          <button type="submit" className="btn btn-success">
-            Create the form
-          </button>
+            <div className="flex justify-end space-x-3">
+              <Link to="/forms" className="btn btn-ghost">
+                Cancel
+              </Link>
+              <button type="submit" className="btn btn-success">
+                Create the form
+              </button>
+            </div>
+          </Form>
         </div>
-      </Form>
-</div>
-    </section>
+      </section>
     </div>
   );
 }

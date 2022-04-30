@@ -1,5 +1,5 @@
 import type { Message } from "@prisma/client";
-import type { ActionFunction, LoaderFunction} from "@remix-run/node";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -47,17 +47,17 @@ export default function NoteDetailsPage() {
 
   return (
     <div className="card w-full md:w-1/2 mx-auto bg-base-200 shadow-xl">
-    <div className="card-body">
-      <h2 className="card-title">{data.message.object}</h2>
-      <h3 className="opacity-60 underline-offset-2 hover:underline">From <a href={`mailto:${data.message.from}`}>{data.message.from}</a></h3>
-      <p className="my-5">{data.message.content}</p>
-      <div className="card-actions justify-end">
-        <form method="post">
-          <button className="btn btn-error btn-outline btn-sm">Delete Message</button>
-        </form>
+      <div className="card-body">
+        <h2 className="card-title">{data.message.object}</h2>
+        <h3 className="opacity-60 underline-offset-2 hover:underline">From <a href={`mailto:${data.message.from}`}>{data.message.from}</a></h3>
+        <p className="my-5">{data.message.content}</p>
+        <div className="card-actions justify-end">
+          <form method="post">
+            <button className="btn btn-error btn-outline btn-sm">Delete Message</button>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
   );
 }
 

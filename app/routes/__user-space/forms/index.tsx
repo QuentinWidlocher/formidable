@@ -35,34 +35,34 @@ export default function WebsiteList() {
 
   return (
     <div className="py-5 lg:py-10">
-    <section className="card w-full sm:w-96 bg-base-200 shadow-xl mx-auto">
-  <div className="card-body">
-    <h2 className="card-title">Your forms</h2>
-    { data.noForms ? (
-      <Link to="new" className="btn btn-outline mt-5">Create your first form</Link>
-    ) : (
-      <>
-      <ul className="menu bg-base-100 rounded-box p-2 my-5">
-        {Object.keys(data.formsByDomain).map(formDomain => (
-          <>
-          <li className="menu-title mt-2">
-            <span>{formDomain}</span>
-          </li>
-          {data.formsByDomain[formDomain].map(form => (
-            <li key={form.slug}>
-              <Link to={`/${form.slug}/messages`}>
-                {form.name}
-              </Link>
-            </li>
-          ))}
-          </>
-        ))}
-    </ul>
-    <Link to="new" className="btn btn-outline">Add another one</Link>
-      </>
-    )}
-  </div>
-  </section>
-  </div>
+      <section className="card w-full sm:w-96 bg-base-200 shadow-xl mx-auto">
+        <div className="card-body">
+          <h2 className="card-title">Your forms</h2>
+          {data.noForms ? (
+            <Link to="new" className="btn btn-outline mt-5">Create your first form</Link>
+          ) : (
+            <>
+              <ul className="menu bg-base-100 rounded-box p-2 my-5">
+                {Object.keys(data.formsByDomain).map(formDomain => (
+                  <>
+                    <li className="menu-title mt-2">
+                      <span>{formDomain}</span>
+                    </li>
+                    {data.formsByDomain[formDomain].map(form => (
+                      <li key={form.slug}>
+                        <Link to={`/${form.slug}/messages`}>
+                          {form.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </>
+                ))}
+              </ul>
+              <Link to="new" className="btn btn-outline">Add another one</Link>
+            </>
+          )}
+        </div>
+      </section>
+    </div>
   )
 }
