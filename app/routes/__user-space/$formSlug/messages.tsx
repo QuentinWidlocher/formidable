@@ -1,10 +1,9 @@
 import type { Form, Message } from "@prisma/client";
-import type { ActionFunction, LoaderFunction } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
+import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form as HtmlForm, Link, NavLink, Outlet, useCatch, useLoaderData, useOutletContext } from "@remix-run/react";
+import { Link, NavLink, Outlet, useCatch, useLoaderData } from "@remix-run/react";
 import { ArrowLeft, Menu, PageEdit } from "iconoir-react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import invariant from "tiny-invariant";
 import { prisma } from "~/db.server";
 
