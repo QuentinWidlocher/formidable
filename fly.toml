@@ -1,4 +1,6 @@
-app = "indie-stack-template"
+# fly.toml file generated for blue-dust-7407 on 2022-05-01T17:06:38+02:00
+
+app = "blue-dust-7407"
 
 kill_signal = "SIGINT"
 kill_timeout = 5
@@ -11,8 +13,8 @@ processes = []
   entrypoint = "sh"
 
 [mounts]
-  source = "data"
   destination = "/data"
+  source = "data"
 
 [[services]]
   internal_port = 8080
@@ -25,10 +27,21 @@ processes = []
     soft_limit = 20
     type = "connections"
 
+  [[services.http_checks]]
+    grace_period = "5s"
+    interval = 10000
+    method = "get"
+    path = "/healthcheck"
+    protocol = "http"
+    timeout = 2000
+    tls_skip_verify = false
+
+    [services.http_checks.headers]
+
   [[services.ports]]
+    force_https = true
     handlers = ["http"]
     port = 80
-    force_https = true
 
   [[services.ports]]
     handlers = ["tls", "http"]
@@ -39,13 +52,3 @@ processes = []
     interval = "15s"
     restart_limit = 0
     timeout = "2s"
-
-  [[services.http_checks]]
-    interval = 10000
-    grace_period = "5s"
-    method = "get"
-    path = "/healthcheck"
-    protocol = "http"
-    timeout = 2000
-    tls_skip_verify = false
-    [services.http_checks.headers]
