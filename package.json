@@ -6,6 +6,7 @@
   "version": "1.0.0",
   "sideEffects": false,
   "scripts": {
+    "postinstall": "remix setup node",
     "build": "run-s build:*",
     "build:css": "npm run generate:css -- --minify",
     "build:remix": "remix build",
@@ -15,7 +16,7 @@
     "format": "prettier --write .",
     "generate:css": "tailwindcss -o ./app/styles/tailwind.css",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
-    "setup": "remix setup node && prisma migrate dev && prisma db seed",
+    "setup": "prisma migrate dev && prisma db seed",
     "start": "remix-serve build",
     "start:mocks": "binode --require ./mocks -- @remix-run/serve:remix-serve build",
     "test": "vitest",
@@ -37,6 +38,7 @@
     "@remix-run/react": "^1.4.3",
     "@remix-run/serve": "^1.4.3",
     "@remix-run/server-runtime": "^1.4.3",
+    "@remix-run/dev": "^1.4.3",
     "bcryptjs": "^2.4.3",
     "clsx": "^1.1.1",
     "daisyui": "^2.14.2",
@@ -48,7 +50,6 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^6.1.1",
-    "@remix-run/dev": "^1.4.3",
     "@remix-run/eslint-config": "^1.4.3",
     "@testing-library/cypress": "^8.0.2",
     "@testing-library/dom": "^8.12.0",
