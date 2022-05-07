@@ -23,6 +23,7 @@ WORKDIR /myapp
 COPY --from=deps /myapp/node_modules /myapp/node_modules
 ADD package.json pnpm-lock.yaml ./
 RUN npx pnpm prune --production
+RUN npx pnpm run setup
 
 # Build the app
 FROM base as build
