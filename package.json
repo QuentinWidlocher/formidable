@@ -3,6 +3,7 @@
   "private": true,
   "description": "",
   "license": "",
+  "version": "1.0.0",
   "sideEffects": false,
   "scripts": {
     "postinstall": "remix setup node",
