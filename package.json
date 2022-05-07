@@ -38,6 +38,7 @@
     "@remix-run/serve": "^1.4.3",
     "@remix-run/server-runtime": "^1.4.3",
     "bcryptjs": "^2.4.3",
+    "clsx": "^1.1.1",
     "daisyui": "^2.14.2",
     "date-fns": "^2.28.0",
     "iconoir-react": "^4.9.1",

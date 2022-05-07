@@ -136,7 +136,7 @@ export default function NewNotePage() {
               <Link to="/forms" className="btn btn-ghost">
                 Cancel
               </Link>
-              <button type="submit" className="btn btn-success">
+              <button type="submit" className="btn btn-primary">
                 Create the form
               </button>
             </div>
