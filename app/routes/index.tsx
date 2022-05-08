@@ -8,7 +8,6 @@ import { useOptionalUser } from "~/utils";
 
 export const loader: LoaderFunction = async ({ request }) => {
   let url = new URL(request.url)
-  console.debug('url.searchParams', url.searchParams)
   let formSent = url.searchParams.get("formSent") ?? false;
 
   return { formSent };

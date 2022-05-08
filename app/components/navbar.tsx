@@ -8,8 +8,8 @@ export default function Navbar({ user }: NavbarProps) {
   return (
     <header className="navbar flex bg-neutral text-neutral-content">
       <div className="navbar-start">
-        <h1 className="ml-3 text-xl font-bold">
-          <Link to="forms">
+        <h1 className="ml-3 text-xl font-bold text-primary">
+          <Link to="/">
             Formidable
           </Link>
         </h1>
