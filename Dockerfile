@@ -14,7 +14,6 @@ WORKDIR /myapp
 
 ADD package.json pnpm-lock.yaml ./
 RUN npx pnpm install --production=false
-RUN npx pnpm setup
 
 # Setup production node_modules
 FROM base as production-deps
@@ -46,7 +45,7 @@ ENV NODE_ENV="production"
 WORKDIR /myapp
 
 COPY --from=production-deps /myapp/node_modules /myapp/node_modules
-COPY --from=build /myapp/node_modules/.prisma /myapp/node_modules/.prisma
+# COPY --from=build /myapp/node_modules/.prisma /myapp/node_modules/.prisma
 
 COPY --from=build /myapp/build /myapp/build
 COPY --from=build /myapp/public /myapp/public
