@@ -7,6 +7,16 @@ async function createMessage(params: DataFunctionArgs['params'], request: Reques
   from?: string,
 }): Promise<Response> {
   if (!params.formSlug) {
+    return new Response("Formidable : You need to provide a valid form name", { status: 400 });
+  }
+
+  let formSlugExists = await prisma.form.count({
+    where: {
+      slug: params.formSlug,
+    }
+  }) > 0;
+
+  if (!formSlugExists) {
     return new Response("Formidable : this form does not exists", { status: 400 });
   }
 
