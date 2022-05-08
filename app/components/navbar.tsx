@@ -1,4 +1,5 @@
 import { Form, Link } from "@remix-run/react";
+import BubbleUpload from "iconoir-react/dist/BubbleUpload";
 
 interface NavbarProps {
   user: { email: string };
@@ -6,11 +7,12 @@ interface NavbarProps {
 
 export default function Navbar({ user }: NavbarProps) {
   return (
-    <header className="navbar flex bg-neutral text-neutral-content">
+    <header className="navbar flex bg-base-200 text-base-content">
       <div className="navbar-start">
         <h1 className="ml-3 text-xl font-bold text-primary">
-          <Link to="/">
-            Formidable
+          <Link to="/" className="flex space-x-2 items-center">
+            <BubbleUpload className="text-base" />
+            <span>Formidable</span>
           </Link>
         </h1>
       </div>

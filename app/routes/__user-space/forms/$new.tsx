@@ -76,7 +76,7 @@ export default function NewNotePage() {
   }, [actionData]);
 
   return (
-    <div className="py-5 lg:py-10">
+    <div className="py-5 lg:py-10 px-5 lg:px-0">
       <section className="card w-full sm:w-96 bg-base-200 shadow-xl mx-auto">
         <div className="card-body">
           <h2 className="card-title">Create a form</h2>

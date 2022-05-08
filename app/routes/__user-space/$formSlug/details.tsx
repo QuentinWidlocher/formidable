@@ -57,7 +57,7 @@ export default function FormEdition() {
   }
 
   return (
-    <div className="py-5 lg:py-10">
+    <div className="py-5 lg:py-10 px-5 lg:px-0">
       <section className="card w-full sm:w-96 bg-base-200 shadow-xl mx-auto overflow-visible">
         <div className="card-body">
           <Link to="/forms" className="btn btn-ghost w-full gap-2">

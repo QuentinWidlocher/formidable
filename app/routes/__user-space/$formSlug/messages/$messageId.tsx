@@ -8,17 +8,21 @@ import { prisma } from "~/db.server";
 import { requireUserId } from "~/session.server";
 
 type LoaderData = {
-  message: Message;
+  message: Pick<Message, "content" | "object" | "from">;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  requireUserId(request);
   invariant(params.formSlug, "formSlug not found");
   invariant(params.messageId, "messageId not found");
 
   const message = await prisma.message.findUnique({
     where: {
       id: params.messageId,
+    },
+    select: {
+      object: true,
+      content: true,
+      from: true,
     }
   })
 
