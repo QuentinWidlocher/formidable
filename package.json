@@ -31,13 +31,15 @@
     "/public/build"
   ],
   "dependencies": {
+    "@babel/core": ">=7.13.0 <8.0.0",
+    "@babel/preset-env": "^7.1.6",
     "@prisma/client": "^3.11.1",
     "@reach/alert": "^0.17.0",
+    "@remix-run/dev": "^1.4.3",
     "@remix-run/node": "^1.4.3",
     "@remix-run/react": "^1.4.3",
     "@remix-run/serve": "^1.4.3",
     "@remix-run/server-runtime": "^1.4.3",
-    "@remix-run/dev": "^1.4.3",
     "bcryptjs": "^2.4.3",
     "clsx": "^1.1.1",
     "daisyui": "^2.14.2",
