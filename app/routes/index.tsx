@@ -76,7 +76,7 @@ export default function Index() {
                 </p>
                 <ol className="list-disc space-y-2">
                   <li><code>from</code> : So you can know who's sending you a message</li>
-                  <li><code>object</code> : So you can know what people constact you about</li>
+                  <li><code>object</code> : So you can know what people are contacting you about</li>
                   <li><code>content</code> : This one is actually required, you can put it inside a <code>{'<textarea>'}.</code></li>
                 </ol>
               </div>
