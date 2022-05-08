@@ -17,7 +17,11 @@ import { getUser } from "./session.server";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: tailwindStylesheetUrl }];
+  return [
+    { rel: "stylesheet", href: tailwindStylesheetUrl },
+    { rel: "icon", href: "/favicon.png", type: "image/svg+xml" },
+    { rel: "icon", href: "/favicon.svg", type: "image/png" },
+  ];
 };
 
 export const meta: MetaFunction = () => ({
