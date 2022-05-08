@@ -6,7 +6,6 @@
   "version": "1.0.0",
   "sideEffects": false,
   "scripts": {
-    "postinstall": "remix setup node",
     "build": "run-s build:*",
     "build:css": "npm run generate:css -- --minify",
     "build:remix": "remix build",
@@ -16,7 +15,7 @@
     "format": "prettier --write .",
     "generate:css": "tailwindcss -o ./app/styles/tailwind.css",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
-    "setup": "prisma migrate dev && prisma db seed",
+    "setup": "remix setup node && prisma migrate dev && prisma db seed",
     "start": "remix-serve build",
     "start:mocks": "binode --require ./mocks -- @remix-run/serve:remix-serve build",
     "test": "vitest",

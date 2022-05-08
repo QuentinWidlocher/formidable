@@ -14,6 +14,7 @@ WORKDIR /myapp
 
 ADD package.json pnpm-lock.yaml ./
 RUN npx pnpm install --production=false
+RUN npx pnpm setup
 
 # Setup production node_modules
 FROM base as production-deps
