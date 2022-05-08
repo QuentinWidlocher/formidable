@@ -1,4 +1,5 @@
 import { Link } from "@remix-run/react";
+import { BubbleUpload } from "iconoir-react";
 import FormCodeExample from "~/components/form-code-example";
 
 import { useOptionalUser } from "~/utils";
@@ -10,7 +11,10 @@ export default function Index() {
       <div className="hero min-h-screen -my-28 bg-base-200 shadow-md">
         <div className="hero-content text-center">
           <div className="max-w-md">
-            <h1 className="text-5xl font-bold text-primary">Formidable</h1>
+            <div className="flex w-full justify-center font-bold text-primary space-x-5">
+              <BubbleUpload className="text-3xl" />
+              <h1 className="text-5xl">Formidable</h1>
+            </div>
             <p className="py-6 text-lg">Just add one drop of <strong>Formidable</strong> to your website and get a contact form just like that !</p>
             {user ? (
               <Link
