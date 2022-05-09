@@ -45,8 +45,9 @@ model Message {
   object  String?
   content String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  readAt    DateTime?
 
   form     Form   @relation(fields: [formSlug], references: [slug], onDelete: Cascade, onUpdate: Cascade)
   formSlug String

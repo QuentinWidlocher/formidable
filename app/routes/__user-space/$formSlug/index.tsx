@@ -1,37 +1,60 @@
-import type { ActionFunction, DataFunctionArgs, LoaderFunction } from "@remix-run/node";
+import type {
+  ActionFunction,
+  DataFunctionArgs,
+  LoaderFunction,
+} from "@remix-run/node";
 import { prisma } from "~/db.server";
 
-async function createMessage(params: DataFunctionArgs['params'], request: Request, { content, object, from }: {
-  content?: string,
-  object?: string,
-  from?: string,
-}): Promise<Response> {
+async function createMessage(
+  params: DataFunctionArgs["params"],
+  request: Request,
+  {
+    content,
+    object,
+    from,
+  }: {
+    content?: string;
+    object?: string;
+    from?: string;
+  }
+): Promise<Response> {
+  console.log({ content, object, from });
+
   if (!params.formSlug) {
-    return new Response("Formidable : You need to provide a valid form name", { status: 400 });
+    return new Response("Formidable : You need to provide a valid form name", {
+      status: 400,
+    });
   }
 
-  let formSlugExists = await prisma.form.count({
-    where: {
-      slug: params.formSlug,
-    }
-  }) > 0;
+  let formSlugExists =
+    (await prisma.form.count({
+      where: {
+        slug: params.formSlug,
+      },
+    })) > 0;
 
   if (!formSlugExists) {
-    return new Response("Formidable : this form does not exists", { status: 400 });
+    return new Response("Formidable : this form does not exists", {
+      status: 400,
+    });
   }
 
-  const returnUrl = request.headers.get("referer") ?? request.headers.get("origin");
+  const returnUrl =
+    request.headers.get("referer") ?? request.headers.get("origin");
 
   if (!returnUrl) {
-    return new Response("Formidable : You cannot use this form if your browser block the 'referer' data. If you're in private browsing, try without.", { status: 400 });
+    return new Response(
+      "Formidable : You cannot use this form if your browser block the 'referer' data. If you're in private browsing, try without.",
+      { status: 400 }
+    );
   }
 
   if (!content) {
     return new Response(null, {
       status: 303,
       headers: {
-        Location: returnUrl + '?formSent=false&error=content',
-      }
+        Location: returnUrl + "?formSent=false&error=content",
+      },
     });
   }
 
@@ -41,13 +64,13 @@ async function createMessage(params: DataFunctionArgs['params'], request: Reques
       object,
       from,
       formSlug: params.formSlug,
-    }
+    },
   });
 
   return new Response(null, {
     status: 303,
     headers: {
-      Location: returnUrl + '?formSent=true',
+      Location: returnUrl + "?formSent=true",
     },
   });
 }
@@ -59,7 +82,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   const from = formData.get("from")?.toString();
 
   return createMessage(params, request, { content, object, from });
-}
+};
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const searchParams = new URL(request.url).searchParams;
@@ -68,4 +91,4 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const from = searchParams.get("from")?.toString();
 
   return createMessage(params, request, { content, object, from });
-}
+};

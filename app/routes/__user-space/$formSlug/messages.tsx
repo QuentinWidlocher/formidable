@@ -1,10 +1,18 @@
 import type { Form, Message } from "@prisma/client";
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link, NavLink, Outlet, useCatch, useLoaderData } from "@remix-run/react";
+import {
+  Link,
+  NavLink,
+  Outlet,
+  useCatch,
+  useFetcher,
+  useLoaderData,
+} from "@remix-run/react";
 import { format } from "date-fns";
 import { ArrowLeft, Menu, PageEdit } from "iconoir-react";
-import { useRef } from "react";
+import { loadavg } from "os";
+import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
 import { prisma } from "~/db.server";
 
@@ -20,9 +28,13 @@ export const loader: LoaderFunction = async ({ params }) => {
       slug: params.formSlug,
     },
     include: {
-      messages: true,
-    }
-  })
+      messages: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+    },
+  });
 
   if (!form) {
     throw new Response("Not Found", { status: 404 });
@@ -31,26 +43,34 @@ export const loader: LoaderFunction = async ({ params }) => {
 };
 
 export default function NoteDetailsPage() {
-  const data = useLoaderData() as LoaderData;
+  const [data, setData] = useState(useLoaderData() as LoaderData);
+  const fetcher = useFetcher();
   const appDrawerToggleRef = useRef<HTMLLabelElement | null>(null);
+
+  useEffect(() => {
+    if (fetcher.type === "done") {
+      setData(fetcher.data);
+    }
+  }, [fetcher.type]);
+
+  function onLinkClick() {
+    appDrawerToggleRef?.current?.click();
+    fetcher.load(`/${data.form.slug}/messages`);
+  }
 
   return (
     <div className="drawer-mobile drawer w-full flex-1">
-      <input
-        id="app-drawer"
-        type="checkbox"
-        className="drawer-toggle"
-      ></input>
+      <input id="app-drawer" type="checkbox" className="drawer-toggle"></input>
       <div className="drawer-content">
         <main className="h-full p-5 lg:py-10">
-          <div className="mx-auto text-center mb-5">
-            <h2 className="text-xl mb-0">{data.form.name}</h2>
+          <div className="mx-auto mb-5 text-center">
+            <h2 className="mb-0 text-xl">{data.form.name}</h2>
             <h3 className="opacity-60">{data.form.domain}</h3>
           </div>
           <label
             ref={appDrawerToggleRef}
             htmlFor="app-drawer"
-            className="btn btn-ghost btn-block gap-2 mb-5 lg:hidden"
+            className="btn btn-ghost btn-block mb-5 gap-2 lg:hidden"
           >
             <Menu /> <span>See the messages</span>
           </label>
@@ -68,7 +88,10 @@ export default function NoteDetailsPage() {
                 <span>Back to your forms</span>
               </Link>
 
-              <Link to={`/${data.form.slug}/details`} className="btn btn-ghost w-full gap-2">
+              <Link
+                to={`/${data.form.slug}/details`}
+                className="btn btn-ghost w-full gap-2"
+              >
                 <PageEdit />
                 <span>See form's details</span>
               </Link>
@@ -76,32 +99,36 @@ export default function NoteDetailsPage() {
 
             <div className="divider"></div>
             {data.form.messages.length === 0 ? (
-              <p className="p-4">
-                No new messages
-              </p>
+              <p className="p-4">No new messages</p>
             ) : (
               <ul className="base-100 menu rounded-box -m-2 space-y-2 p-2">
                 <li className="menu-title">
                   <span>Messages</span>
                 </li>
                 {data.form.messages.map((message) => (
-                  <li key={message.id}>
+                  <li className="indicator w-full" key={message.id}>
                     <NavLink
-                      className={({ isActive }) => `${isActive ? "bg-base-300" : ""} flex flex-col items-start`}
-                      to={message.id}
-                      onClick={() => appDrawerToggleRef?.current?.click()}
-                    >
-                      <span>
-                        {message.object ? (
-                          <>{message.object}, </>
-                        ) : null}
-                        {format(new Date(message.createdAt), "dd MMMM yyyy 'at' hh:mm")}
-                      </span>
-                      {
-                        message.from
-                          ? <span className="opacity-60 -mt-4">from {message.from}</span>
-                          : null
+                      className={({ isActive }) =>
+                        `${
+                          isActive ? "bg-base-300" : ""
+                        } flex flex-col items-start`
                       }
+                      to={message.id}
+                      onClick={() => onLinkClick()}
+                    >
+                      {message.readAt ? null : (
+                        <span className="badge indicator-item badge-sm badge-primary"></span>
+                      )}
+                      <span>
+                        {message.object ? <>{message.object}, </> : null}
+                        {format(
+                          new Date(message.createdAt),
+                          "dd MMMM yyyy 'at' hh:mm"
+                        )}
+                      </span>
+                      {message.from ? (
+                        <span className="opacity-60">from {message.from}</span>
+                      ) : null}
                     </NavLink>
                   </li>
                 ))}
@@ -111,7 +138,7 @@ export default function NoteDetailsPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
@@ -129,4 +156,3 @@ export function CatchBoundary() {
 
   throw new Error(`Unexpected caught response with status: ${caught.status}`);
 }
-

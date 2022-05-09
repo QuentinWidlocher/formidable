@@ -11,7 +11,7 @@ type LoaderData = {
   message: Pick<Message, "content" | "object" | "from">;
 };
 
-export const loader: LoaderFunction = async ({ request, params }) => {
+export const loader: LoaderFunction = async ({ params }) => {
   invariant(params.formSlug, "formSlug not found");
   invariant(params.messageId, "messageId not found");
 
@@ -20,14 +20,27 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       id: params.messageId,
     },
     select: {
+      id: true,
       object: true,
       content: true,
       from: true,
-    }
-  })
+      readAt: true,
+    },
+  });
 
   if (!message) {
     return redirect(`/${params.formSlug}/messages`);
+  }
+
+  if (message.readAt == null) {
+    await prisma.message.update({
+      where: {
+        id: message.id,
+      },
+      data: {
+        readAt: new Date(),
+      },
+    });
   }
 
   return json<LoaderData>({ message });
@@ -43,21 +56,25 @@ export const action: ActionFunction = async ({ request, params }) => {
     },
   });
 
-  return redirect('.');
-}
+  return redirect(".");
+};
 
 export default function NoteDetailsPage() {
   const data = useLoaderData() as LoaderData;
 
   return (
-    <div className="card w-full md:w-1/2 mx-auto bg-base-200 shadow-xl">
+    <div className="card mx-auto w-full bg-base-200 shadow-xl md:w-1/2">
       <div className="card-body">
         <h2 className="card-title">{data.message.object}</h2>
-        <h3 className="opacity-60 underline-offset-2 hover:underline">From <a href={`mailto:${data.message.from}`}>{data.message.from}</a></h3>
+        <h3 className="underline-offset-2 opacity-60 hover:underline">
+          From <a href={`mailto:${data.message.from}`}>{data.message.from}</a>
+        </h3>
         <p className="my-5">{data.message.content}</p>
         <div className="card-actions justify-end">
           <form method="post">
-            <button className="btn btn-error btn-outline btn-sm">Delete Message</button>
+            <button className="btn btn-outline btn-error btn-sm">
+              Delete Message
+            </button>
           </form>
         </div>
       </div>
