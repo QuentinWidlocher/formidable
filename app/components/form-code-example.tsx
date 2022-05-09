@@ -20,8 +20,9 @@ export default function FormCodeExample({ formSlug, className = "" }: FormCodeEx
     <pre data-prefix="11"></pre>
     <pre data-prefix="12"><code>{'\t<'}<span className="text-red-400">div</span>{'>'}</code></pre>
     <pre data-prefix="13"><code>{'\t\t<'}<span className="text-red-400">label</span> <span className="text-orange-300">for</span>=<span className="text-green-300">"content"</span>{'>'}Your message{'</'}<span className="text-red-400">label</span>{'>'}</code></pre>
-    <pre data-prefix="14"><code>{'\t\t<'}<span className="text-red-400">textarea</span> <mark className="text-neutral-content px-1 -mx-1 py-0.5 rounded-sm bg-orange-900"><span className="text-orange-300">name</span>=<span className="text-green-300">"content"</span></mark>{'/>'}</code></pre>
+    <pre data-prefix="14"><code>{'\t\t<'}<span className="text-red-400">textarea</span> <mark className="text-neutral-content px-1 -mx-1 py-0.5 rounded-sm bg-orange-900"><span className="text-orange-300">name</span>=<span className="text-green-300">"content"</span></mark>{'></'}<span className="text-red-400">textarea</span>{'>'}</code></pre>
     <pre data-prefix="15"><code>{'\t</'}<span className="text-red-400">div</span>{'>'}</code></pre>
-    <pre data-prefix="16"><code>{'</'}<span className="text-red-400">form</span>{'>'}</code></pre>
+    <pre data-prefix="16"><code>{'\t<'}<span className="text-red-400">button</span>{'>Submit</'}<span className="text-red-400">button</span>{'>'}</code></pre>
+    <pre data-prefix="17"><code>{'</'}<span className="text-red-400">form</span>{'>'}</code></pre>
   </div>
 }

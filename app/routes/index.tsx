@@ -90,7 +90,7 @@ export default function Index() {
               </div>
             </div>
             <div className="w-full">
-              <FormCodeExample formSlug="formidable-site" />
+              <FormCodeExample formSlug="formidablesite-contact" />
             </div>
           </section>
           <div className="divider"></div>
