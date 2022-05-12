@@ -21,7 +21,7 @@ Here are the inputs you can add (feel free to add client-side validation with HT
 Here is a *working* example :
 
 ```html
-<form action="https://formidable.site/formidable-site">
+<form action="https://formidable.site/formidablesite-contact">
 	<div>
 		<label for="from">Your email</label>
 		<input name="from" type="email"/>
